@@ -1,0 +1,1762 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "7be3c111-1637-41fc-b6b5-24add59e2de8",
+   "metadata": {},
+   "source": [
+    "## Task 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "67b3f3c0-5f37-4b02-8060-20296e7a6a9c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "df = pd.DataFrame({\n",
+    "    \"name\": [\"Sara\", \"Noura\", \"Reem\", \"Hind\"],\n",
+    "    \"city\": [\"Riyadh\", \"Jeddah\", \"Riyadh\", \"Dammam\"],\n",
+    "    \"score\": [88, 92, 75, 60],\n",
+    "}, index=[\"a\", \"b\", \"c\", \"d\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "00d3cf37-7790-4d80-a03a-3bce7406dad7",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "    \n",
+    "### توقعي (قبل التشغيل):\n",
+    "    \n",
+    "1- اتوقع النتيجه Series\n",
+    "    \n",
+    "2- اتوقع النتيجه DataFarme\n",
+    "\n",
+    "3- اتوقع النتيجه Jeddah\n",
+    "\n",
+    "4- اتوقع النتيجه Jeddah\n",
+    "\n",
+    "5- اتوقع تطلع [ 88, 92, 75]\n",
+    "\n",
+    "6- اتوقع تطلع [ 88, 75 ]\n",
+    "\n",
+    "7- اتوقع بتكون [ “Noura” , “Sara”]\n",
+    "\n",
+    "8- اتوقع عدد = 2 Riyadh  \n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "9ad730bd-0181-4cf5-a097-5c69b482556e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.series.Series'>\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "Jeddah\n",
+      "Jeddah\n",
+      "[88, 92, 75]\n",
+      "[88, 92]\n",
+      "['Sara', 'Noura']\n",
+      "2\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(type(df[\"score\"]))\n",
+    "print(type(df[[\"score\"]]))\n",
+    "print(df.loc[\"b\", \"city\"])\n",
+    "print(df.iloc[1, 1])\n",
+    "print(df.loc[\"a\":\"c\", \"score\"].tolist())\n",
+    "print(df.iloc[0:2, 2].tolist())\n",
+    "print(df[df[\"score\"] > 80][\"name\"].tolist())\n",
+    "print(df[\"city\"].value_counts()[\"Riyadh\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8d122182-b906-4532-987c-f6382a50a323",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (بعد التشغيل):\n",
+    "\n",
+    "السطر 6: كان توقعي غلط، توقعت `[88, 75]` لكن الناتج الصح `[88, 92]`.\n",
+    "\n",
+    "السبب: `iloc` يعتمد على ارقام الصفوف، و`0:2` ياخذ الصفين `0` و`1`، لذلك اخذ درجات 88 و92.\n",
+    "\n",
+    "السطر 7: الناتج طلع بنفس ترتيب الصفوف في الجدول، ليس حسب ترتيب الاسماء اللي توقعته `[\"Noura\", \"Sara\"]`.\n",
+    "\n",
+    "السطر 5: `loc` رجع 3 صفوف لان `loc` يشمل اخر قيمه (`a`, `b`, `c`) في `\"a\":\"c\"`.\n",
+    "\n",
+    "السطر 6: `iloc` رجع صفين فقط لان لا يشمل الرقم الاخير في النطاق `0:2`.\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "832df561-c87e-4d03-b0d6-d1ea58d28b59",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### السؤال 2: ما الفرق بين `df[\"score\"]` و`df[[\"score\"]]`؟ ومتى نحتاج كل واحد؟\n",
+    "\n",
+    "`df[\"score\"]`  يرجع Series، لكن `df[[\"score\"]]` يرجع DataFrame\n",
+    "\n",
+    "استخدم الاول لعمود واحد، والثاني اذا ابي النتيجه تبقى جدول\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fd3943ce-466e-45e1-afd8-4ec2ab5e7fb9",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### السؤال 4: الفرق بين NumPy array وDataFrame، ولماذا نحتاج Pandas؟\n",
+    "\n",
+    "**توقعي (قبل الجواب):** اتوقع ان NumPy ابسط ، وDataFrame يكون مرتب اكثر\n",
+    "\n",
+    "NumPy array عبارة عن مصفوفة بيانات، لكن DataFrame فهو جدول فيه صفوف واعمده\n",
+    "\n",
+    "نستخدم Pandas لانها تسهل علينا ترتيب البيانات والتعامل معها\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b58ab726-d507-41ec-9bca-88c8bd817afe",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### السؤال 5: جدول من حياتي اليومية\n",
+    "\n",
+    "مثال: قائمة مشتريات منزلية\n",
+    "\n",
+    "الصف يكون منتج واحد مثل الحليب او الخبز \n",
+    "العمود يكون اسم المنتج او الكميه او السعر\n",
+    "\n",
+    "اتوقع عمود السعر يكون فيه قيم ناقصة احيانا ، لاني ممكن ما اعرف سعر بعض المنتجات وقت ما اكتب القائمة.\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "27ee9228-d526-4808-91f5-f47d4dbee0fe",
+   "metadata": {},
+   "source": [
+    "## Task 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "a2f4dfb6-440c-4391-ad4e-4915bf73934b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = {\n",
+    "    \"order_id\": [101, 102, 103, 104, 105, 106, 107, 108, 105, 109, 110, 111],\n",
+    "    \"customer\": [\"Sara\", \"Noura\", \"Reem\", \"Hind\", \"Lama\", \"Maha\", \"Rana\", \"Dana\", \"Lama\", \"Joud\", \"Hala\", \"Amal\"],\n",
+    "    \"city\": [\"Riyadh\", \"riyadh \", \"Jeddah\", \"Dammam\", \"Jeddah\", \"RIYADH\", \"Riyadh\", None, \"Jeddah\", \"Dammam\", \"Riyadh\", \"Jeddah\"],\n",
+    "    \"drink\": [\"Latte\", \"Mocha\", \"Latte\", \"Espresso\", \"Latte\", \"Mocha\", \"Latte\", \"Espresso\", \"Latte\", \"Latte\", None, \"Mocha\"],\n",
+    "    \"price\": [\"18\", \"21\", \"18\", \"12\", \"18\", \"21\", \"eighteen\", \"12\", \"18\", \"18\", \"21\", \"21\"],\n",
+    "    \"quantity\": [2, 1, 3, 1, 2, None, 1, 4, 2, 1, 2, 1],\n",
+    "    \"rating\": [5, 4, 5, 3, 4, 5, 4, None, 4, 5, 30, 4],\n",
+    "}\n",
+    "df = pd.DataFrame(data)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "db54e984-9f16-4dc0-a686-05074817fb57",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع  `shape` يكون 12 صف و7 اعمده. واتوقع `customer` و`city` و`drink` تكون نصوص، و`order_id` و`quantity` و`rating` تكون ارقام. واتوقع عمود `price` يكون من نوع `object`، لان القيم فيه كنصوص مثل `\"18\"` و`\"21\"`، وفيه كلمه `\"eighteen\"`.\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "5d6ca856-d7a6-47fc-8c42-e136304c786d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   order_id customer     city  drink price  quantity  rating\n",
+      "0       101     Sara   Riyadh  Latte    18       2.0     5.0\n",
+      "1       102    Noura  riyadh   Mocha    21       1.0     4.0\n",
+      "2       103     Reem   Jeddah  Latte    18       3.0     5.0\n",
+      "    order_id customer    city  drink price  quantity  rating\n",
+      "10       110     Hala  Riyadh   None    21       2.0    30.0\n",
+      "11       111     Amal  Jeddah  Mocha    21       1.0     4.0\n",
+      "(12, 7)\n",
+      "order_id      int64\n",
+      "customer     object\n",
+      "city         object\n",
+      "drink        object\n",
+      "price        object\n",
+      "quantity    float64\n",
+      "rating      float64\n",
+      "dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "# اول 3 صفوف\n",
+    "print(df.head(3))\n",
+    "\n",
+    "# اخر صفين\n",
+    "print(df.tail(2))\n",
+    "\n",
+    "# عدد الصفوف والاعمده\n",
+    "print(df.shape)\n",
+    "\n",
+    "# انواع البيانات\n",
+    "print(df.dtypes)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4fa199ee-26e5-4cb8-a364-2313d38ba0be",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** كان توقعي صح في `shape` وبعض الاعمده تكون `object`. لكن ما توقعت ان `quantity` و`rating` تكون `float64` اتوقع لان فيها قيم ناقصه (`None`)، وحولتها Pandas الى `float` وطلعت القيم مثل `5.0` و`2.0`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "193e8d4f-18ee-4f94-8573-cd0ef46f4c01",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع ان `describe()` يطلع الاعمده اللي فيها ارقام مثل `order_id` و`quantity` و`rating`. واتوقع ان `price` ما يطلع، لا قيمه مكتوبة كنصوص مو ارقام\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "1b59acf1-9879-4ee4-b266-3254cadf7698",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 12 entries, 0 to 11\n",
+      "Data columns (total 7 columns):\n",
+      " #   Column    Non-Null Count  Dtype  \n",
+      "---  ------    --------------  -----  \n",
+      " 0   order_id  12 non-null     int64  \n",
+      " 1   customer  12 non-null     object \n",
+      " 2   city      11 non-null     object \n",
+      " 3   drink     11 non-null     object \n",
+      " 4   price     12 non-null     object \n",
+      " 5   quantity  11 non-null     float64\n",
+      " 6   rating    11 non-null     float64\n",
+      "dtypes: float64(2), int64(1), object(4)\n",
+      "memory usage: 804.0+ bytes\n",
+      "         order_id   quantity     rating\n",
+      "count   12.000000  11.000000  11.000000\n",
+      "mean   105.916667   1.818182   6.636364\n",
+      "std      3.175426   0.981650   7.775252\n",
+      "min    101.000000   1.000000   3.000000\n",
+      "25%    103.750000   1.000000   4.000000\n",
+      "50%    105.500000   2.000000   4.000000\n",
+      "75%    108.250000   2.000000   5.000000\n",
+      "max    111.000000   4.000000  30.000000\n"
+     ]
+    }
+   ],
+   "source": [
+    "df.info()\n",
+    "print(df.describe())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e011f780-c533-4ff6-8eee-5fc2801186b9",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** توقعي كان صح، لان `describe()` اظهر الاعمده الي فيها ارقام فقط وهي `order_id` و`quantity` و`rating`. لكن `price` ما ظهر لان قيمه نصوص مو ارقام\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0924a3a0-ec59-404d-8499-9491d391d9b7",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع ان كتابه `Riyadh` ليست موحده لان لها اكثر من شكل\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "e2414821-e21c-4cd6-8ec5-9794dbb6de74",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "city\n",
+      "Jeddah     4\n",
+      "Riyadh     3\n",
+      "Dammam     2\n",
+      "riyadh     1\n",
+      "RIYADH     1\n",
+      "None       1\n",
+      "Name: count, dtype: int64\n",
+      "drink\n",
+      "Latte       6\n",
+      "Mocha       3\n",
+      "Espresso    2\n",
+      "None        1\n",
+      "Name: count, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[\"city\"].value_counts(dropna=False))\n",
+    "print(df[\"drink\"].value_counts(dropna=False))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "75d586ed-1d5e-497f-99fd-b1e39e3c23a4",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** توقعي طلع صح الرياض مكتوبه باكثر من طريقه وانحسبت اكثر من مره ولو حددناها كلها بتطلع 5 مرات وفيه بعد قيمه ناقصه None بالمدن والمشروبات\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b9fbecaf-863d-4712-ab63-90c64fa42971",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع الصف 2 هو الي رقمه 2 بالجدول loc وiloc يعطون نفس الصف لان ارقام الصفوف تبدا من 0\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "28813e41-158e-413e-82a5-0844acd7d402",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   customer     drink\n",
+      "0      Sara     Latte\n",
+      "1     Noura     Mocha\n",
+      "2      Reem     Latte\n",
+      "3      Hind  Espresso\n",
+      "4      Lama     Latte\n",
+      "5      Maha     Mocha\n",
+      "6      Rana     Latte\n",
+      "7      Dana  Espresso\n",
+      "8      Lama     Latte\n",
+      "9      Joud     Latte\n",
+      "10     Hala      None\n",
+      "11     Amal     Mocha\n",
+      "order_id       103\n",
+      "customer      Reem\n",
+      "city        Jeddah\n",
+      "drink        Latte\n",
+      "price           18\n",
+      "quantity       3.0\n",
+      "rating         5.0\n",
+      "Name: 2, dtype: object\n",
+      "order_id       111\n",
+      "customer      Amal\n",
+      "city        Jeddah\n",
+      "drink        Mocha\n",
+      "price           21\n",
+      "quantity       1.0\n",
+      "rating         4.0\n",
+      "Name: 11, dtype: object\n",
+      "  customer     city\n",
+      "0     Sara   Riyadh\n",
+      "1    Noura  riyadh \n",
+      "2     Reem   Jeddah\n",
+      "3     Hind   Dammam\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[[\"customer\", \"drink\"]])\n",
+    "\n",
+    "print(df.loc[2])\n",
+    "\n",
+    "print(df.iloc[-1])\n",
+    "\n",
+    "print(df.loc[0:3, [\"customer\", \"city\"]])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3a741758-68ae-419b-9000-bfd88eed229e",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** كان توقعي صح، لان `loc` و`iloc` عطوني نفس الصف\n",
+    "\n",
+    "لكن مو دايم يكونون نفس الشي، لان لو تغير الفهرس ممكن يعطون صفوف مختلفة\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ed3b8044-821b-4056-876c-431a89ebc287",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع يطلع 4 صفوف فيها Latte والكميه 2 او اكثر\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "a029ca9c-5128-4b07-9366-6db2452ddb06",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   order_id customer    city  drink price  quantity  rating\n",
+      "0       101     Sara  Riyadh  Latte    18       2.0     5.0\n",
+      "2       103     Reem  Jeddah  Latte    18       3.0     5.0\n",
+      "4       105     Lama  Jeddah  Latte    18       2.0     4.0\n",
+      "8       105     Lama  Jeddah  Latte    18       2.0     4.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df[(df[\"drink\"] == \"Latte\") & (df[\"quantity\"] >= 2)])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ce645484-a091-4008-a88d-f38520e35789",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** توقعي كان صح النتيجه طلعت 4 صفوف (0 و2 و4 و8)\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5ca4da56-9cb9-46fb-b5b4-45a6c59e4a2b",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**توقعي (قبل التشغيل):** اتوقع اعلى 3 طلبات تكون لرانا ثم ريم ثم سارة، لان كمياتهم الاعلى في الجدول\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "4d772227-6d2d-4cf0-a6e4-6e8b0179ca7b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   order_id customer    city     drink price  quantity  rating\n",
+      "7       108     Dana    None  Espresso    12       4.0     NaN\n",
+      "2       103     Reem  Jeddah     Latte    18       3.0     5.0\n",
+      "0       101     Sara  Riyadh     Latte    18       2.0     5.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.sort_values(by=\"quantity\", ascending=False).head(3))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5142576b-e496-43aa-860a-b80976259f16",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "**بعد التشغيل:** كان توقعي غلط توقعت رانا من اعلى الطلبات، لكن كميتها 1 فقط اللي طلع اول هو دانا لان كميتها 4، وبعدها ريم 3، ثم سارة 2 ولاحظت صف دانا فيه قيم ناقصه في `city` و`rating`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "da55125a-2652-4023-98f1-2b6d9aadd875",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظات (Markdown): المشاكل في الداتا قبل التنظيف\n",
+    "\n",
+    "- فيه قيم ناقصه (`None` و`NaN`)\n",
+    "- الرياض مكتوبة باكثر من طريقه\n",
+    "- عمود `price` مخزن كنصوص\n",
+    "- فيه قيمه مختلفه في `price` وهي `\"eighteen\"`\n",
+    "- فيه `order_id` مكرر\n",
+    "- فيه قيمه مو واضحه في `rating` وهي 30\n",
+    "- فيه صف مكرر (Lama) وتفاصيله كلها متشابهه\n",
+    "- فيه مسافه زايده في `\"riyadh \"` غير اختلاف الحروف الكبيره والصغيره\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9fe88e70-a11f-4ba5-845e-3ceff6e30b79",
+   "metadata": {},
+   "source": [
+    "## Task 3"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "63e3e295-def5-4c25-9843-197532f42200",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع فيه قيم ناقصه باكثر من عمود مثل city وdrink وquantity وrating\n",
+    "واتوقع فيه صف واحد مكرر\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "9349251a-7d76-41d7-a06f-037b9c4ceef0",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "order_id    0\n",
+      "customer    0\n",
+      "city        1\n",
+      "drink       1\n",
+      "price       0\n",
+      "quantity    1\n",
+      "rating      1\n",
+      "dtype: int64\n",
+      "1\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_clean = df.copy()\n",
+    "print(df_clean.isna().sum())\n",
+    "\n",
+    "print(df_clean.duplicated().sum())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "a5041359-c230-4a59-9e06-8fb9799bb9c9",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   order_id customer    city  drink price  quantity  rating\n",
+      "8       105     Lama  Jeddah  Latte    18       2.0     4.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean[df_clean.duplicated()])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f049e74a-0c86-48bf-892e-694de14451bb",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح، لانه فيه قيم ناقصه وفيه صف مكرر واحد\n",
+    "والطلب المكرر كان للعميلة Lama، وهو الصف عند index 8، وكان مكرر لنفس الطلب الموجود عند index 4\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4ba220fa-48a2-4cda-97a7-df0109cc0529",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع بعد حذف الصف المكرر يصير عدد الصفوف 11 بدل 12\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "8f671e32-9b62-4467-93db-07758d88381d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(12, 7)\n",
+      "(11, 7)\n",
+      "0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean.shape)\n",
+    "\n",
+    "df_clean = df_clean.drop_duplicates()\n",
+    "\n",
+    "print(df_clean.shape)\n",
+    "print(df_clean.duplicated().sum())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8122adda-92bc-4db7-97a5-1daf056072a2",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع بعد التوحيد تصير 3 مدن فقط\n",
+    "واتوقع ان القيمه الناقصه None تظل نفس ماهي\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "1e5ad5c7-0935-409d-a07b-af6dc6638e1a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "city\n",
+      "Riyadh    5\n",
+      "Jeddah    3\n",
+      "Dammam    2\n",
+      "None      1\n",
+      "Name: count, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_clean[\"city\"] = df_clean[\"city\"].str.strip()\n",
+    "df_clean[\"city\"] = df_clean[\"city\"].str.title()\n",
+    "\n",
+    "print(df_clean[\"city\"].value_counts(dropna=False))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bf17fc6f-2b0d-4bb0-a45c-76dd406a2ff0",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح لان المدن صارت موحده\n",
+    "ولاحظت ان Riyadh صارت 5 مرات بدل ما كانت مكتوبة باكثر من شكل\n",
+    "لكن None ماتغيرت\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "beaf5a71-4b7a-4f1f-9c1f-ccdbde27911e",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع لو استخدمنا astype(float) على price بيطلع غلط  لان فيه قيمه مكتوبه بالكلمات وهي \"eighteen\"\n",
+    "واتوقع ان\"eighteen\" تتحول الى 18\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "1a8b5328-955b-4df3-b5fd-457274aa7c1d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "float64\n",
+      "0     18.0\n",
+      "1     21.0\n",
+      "2     18.0\n",
+      "3     12.0\n",
+      "4     18.0\n",
+      "5     21.0\n",
+      "6     18.0\n",
+      "7     12.0\n",
+      "9     18.0\n",
+      "10    21.0\n",
+      "11    21.0\n",
+      "Name: price, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_clean[\"price\"] = df_clean[\"price\"].replace(\"eighteen\", \"18\")\n",
+    "\n",
+    "df_clean[\"price\"] = df_clean[\"price\"].astype(float)\n",
+    "\n",
+    "print(df_clean[\"price\"].dtype)\n",
+    "print(df_clean[\"price\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8d85b35e-ab7b-462b-bc7b-da063c9b2893",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح، لان \"eighteen\" تحولت إلى 18\n",
+    "ولاحظت ان عمود price صار من نوع float64 وكل الاسعار صارت ارقام\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ee2d71ee-268d-42e5-913f-c8550ffbc596",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع القيمه المستحيله هي 30، واتوقع موجوده مره وحده فقط\n",
+    "واتوقع يكون فيه قيمه ناقصه وحده في rating بعد ما نعتبر القيمه المستحيله مفقوده\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "6839cd44-3fa6-43db-a4b0-5f9716dbbd70",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "    order_id customer    city drink  price  quantity  rating\n",
+      "10       110     Hala  Riyadh  None   21.0       2.0    30.0\n",
+      "2\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "print(df_clean[\"rating\"].isna().sum())\n",
+    "condition = (df_clean[\"rating\"] < 1) | (df_clean[\"rating\"] > 5)\n",
+    "print(df_clean[condition])\n",
+    "df_clean.loc[condition, \"rating\"] = np.nan\n",
+    "print(df_clean[\"rating\"].isna().sum())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "946f20ba-9e90-4629-acc0-8be7d9662ec9",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح ان القيمة المستحيلة هي 30 وموجوده مره وحده\n",
+    "لكن توقعت القيم الناقصه تكون 1، وطلعت 2 لانه كان فيها قيمه ناقصه من قبل وبعد تحويل 30 الى NaN صار المجموع 2\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "80afcb24-0722-4961-9a09-baad7701ca21",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "quantity نعبيها بـ median لانها ارقام\n",
+    "rating نعبيها بـ median لانها ارقام\n",
+    "city نعبيها بـ Unknown لانها نص\n",
+    "drink نعبيها بـ mode لانه اكثرهم تكرار\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "ce35df5f-a41e-4766-9a15-5fe332bc5256",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.5\n",
+      "4.0\n",
+      "order_id    0\n",
+      "customer    0\n",
+      "city        1\n",
+      "drink       1\n",
+      "price       0\n",
+      "quantity    1\n",
+      "rating      2\n",
+      "dtype: int64\n",
+      "order_id    0\n",
+      "customer    0\n",
+      "city        0\n",
+      "drink       0\n",
+      "price       0\n",
+      "quantity    0\n",
+      "rating      0\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean[\"quantity\"].median())\n",
+    "print(df_clean[\"rating\"].median())\n",
+    "print(df_clean.isna().sum())\n",
+    "\n",
+    "df_clean[\"quantity\"] = df_clean[\"quantity\"].fillna(df_clean[\"quantity\"].mode()[0])\n",
+    "df_clean[\"rating\"] = df_clean[\"rating\"].fillna(df_clean[\"rating\"].median())\n",
+    "df_clean[\"city\"] = df_clean[\"city\"].fillna(\"Unknown\")\n",
+    "df_clean[\"drink\"] = df_clean[\"drink\"].fillna(df_clean[\"drink\"].mode()[0])\n",
+    "\n",
+    "print(df_clean.isna().sum())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "68c165d6-1925-4873-827f-cf76afcb8c55",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح واستخدمنا median للـ quantity، لكن لاحظت ان الناتج طلع 1.5\n",
+    "واشوف ان الرقم مو منطقي، لان محد يطلب نص كوب الافضل نقربه لاقرب عدد صحيح او نستخدم طريقه ثانيه تكون ادق\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5f06baa0-b30f-4d75-a841-4aa9486a50b6",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### قراري\n",
+    "\n",
+    "اختار mode للـ quantity لانه يعطيني عدد صحيح ومنطقي اكثر من 1.5\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "ad5b8429-487f-4613-9496-1bc9532c00da",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.0\n",
+      "Latte\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean[\"quantity\"].mode()[0])\n",
+    "print(df_clean[\"drink\"].mode()[0])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b2c0ddad-d347-4ea4-812a-1dad0838c6d8",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع مجموع القيم الناقصه 0\n",
+    "واتوقع عدد الصفوف 11 وعدد الاعمده 7 \n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "19d1c557-363f-48e1-8959-3873e684ccd1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n",
+      "(11, 7)\n",
+      "    order_id customer     city     drink  price  quantity  rating\n",
+      "0        101     Sara   Riyadh     Latte   18.0       2.0     5.0\n",
+      "1        102    Noura   Riyadh     Mocha   21.0       1.0     4.0\n",
+      "2        103     Reem   Jeddah     Latte   18.0       3.0     5.0\n",
+      "3        104     Hind   Dammam  Espresso   12.0       1.0     3.0\n",
+      "4        105     Lama   Jeddah     Latte   18.0       2.0     4.0\n",
+      "5        106     Maha   Riyadh     Mocha   21.0       1.0     5.0\n",
+      "6        107     Rana   Riyadh     Latte   18.0       1.0     4.0\n",
+      "7        108     Dana  Unknown  Espresso   12.0       4.0     4.0\n",
+      "9        109     Joud   Dammam     Latte   18.0       1.0     5.0\n",
+      "10       110     Hala   Riyadh     Latte   21.0       2.0     4.0\n",
+      "11       111     Amal   Jeddah     Mocha   21.0       1.0     4.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean.isna().sum().sum())\n",
+    "\n",
+    "print(df_clean.shape)\n",
+    "\n",
+    "print(df_clean)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a0dd865b-95db-4b7a-85d2-abf3cd048cc0",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح القيم الناقصه صارت 0 وعدد الصفوف 11 والاعمده 7\n",
+    "ولاحظت البيانات صارت اوضح بعد التنظيف\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9742c469-2a98-470a-b90a-5f4ba612f010",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### Decision Log\n",
+    "\n",
+    "| الخطوة | القرار | السبب | عدد الصفوف/الخلايا المتاثرة |\n",
+    "|---|---|---|---|\n",
+    "| حذف المكرر | حذف الصف المكرر | لانه نفس البيانات مكررة | 1 صف |\n",
+    "| توحيد المدن | استخدام `strip` و `title` | عشان تكون كتابة المدن موحدة | 2 خلية |\n",
+    "| تحويل `price` | تحويله الى `float` بعد تصحيح `eighteen` | لان العمود كان نصي | 1 خلية |\n",
+    "| قيمة `rating` المستحيلة | تحويل 30 الى `NaN` | لانها قيمة غير منطقية | 1 خلية |\n",
+    "| ملء `quantity` | استخدام `mode` | لان `median` طلع 1.5 وهذا مو منطقي | 1 خلية |\n",
+    "| ملء `rating` | استخدام `median` | لانه عمود رقمي | 2 خلية |\n",
+    "| ملء `city` | استخدام `Unknown` | لان المدينة غير معروفة | 1 خلية |\n",
+    "| ملء `drink` | استخدام `mode` (`Latte`) | لانه المشروب الاكثر تكرارا | 1 خلية |\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "42d12d31-97cf-4325-bc09-143b344343e0",
+   "metadata": {},
+   "source": [
+    "## Task 4"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fa176c99-67e8-4678-9882-716d3c96d9e0",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع بعد اضافه revenue يصير عدد الاعمده 8\n",
+    "واتوقع Riyadh تكون الاعلى ايراد\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "2342ce0b-1d7a-4a52-8ea6-8763bb4fe0da",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(11, 8)\n",
+      "327.0\n",
+      "city\n",
+      "Riyadh     138.0\n",
+      "Jeddah     111.0\n",
+      "Unknown     48.0\n",
+      "Dammam      30.0\n",
+      "Name: revenue, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_clean[\"revenue\"] = df_clean[\"price\"] * df_clean[\"quantity\"]\n",
+    "print(df_clean.shape)\n",
+    "print(df_clean[\"revenue\"].sum())\n",
+    "print(df_clean.groupby(\"city\")[\"revenue\"].sum().sort_values(ascending=False))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e5c9bc7e-3399-4099-9ff6-617c3472925c",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح لان عدد الاعمده صار 8 وRiyadh كانت الاعلى ايرادا\n",
+    "ولاحظت ان Unknown ظهرت ضمن المدن لانها كانت قيمه ناقصه قبل التنظيف\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ae1eda24-6f11-401e-899e-0b6b6dc2fa3e",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "- اتوقع ان Latte يكون اكثر مشروب من ناحية الكمية لانه اكثر مشروب متكرر\n",
+    "- اتوقع ان Latte يكون اعلى مشروب من ناحية التقييم\n",
+    "- اتوقع ان Riyadh تكون اعلى مدينة من ناحية نسبة الطلبات\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "2711a760-137b-4c41-8c8a-a063bfbbb214",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "drink\n",
+      "Latte       11.0\n",
+      "Espresso     5.0\n",
+      "Mocha        3.0\n",
+      "Name: quantity, dtype: float64\n",
+      "drink\n",
+      "Latte       4.500000\n",
+      "Mocha       4.333333\n",
+      "Espresso    3.500000\n",
+      "Name: rating, dtype: float64\n",
+      "city\n",
+      "Riyadh     0.454545\n",
+      "Jeddah     0.272727\n",
+      "Dammam     0.181818\n",
+      "Unknown    0.090909\n",
+      "Name: proportion, dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean.groupby(\"drink\")[\"quantity\"].sum().sort_values(ascending=False))\n",
+    "\n",
+    "print(df_clean.groupby(\"drink\")[\"rating\"].mean().sort_values(ascending=False))\n",
+    "\n",
+    "print(df_clean[\"city\"].value_counts(normalize=True))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "325050cb-164f-4b31-ac18-bb2294587bde",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع ان العميلة Reem يكون عندها اعلى ايراد لانها طلبت اكبر كميه\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "dadc0dcd-b054-459a-a262-8b4ecde660a6",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "order_id       103\n",
+      "customer      Reem\n",
+      "city        Jeddah\n",
+      "drink        Latte\n",
+      "price         18.0\n",
+      "quantity       3.0\n",
+      "rating         5.0\n",
+      "revenue       54.0\n",
+      "Name: 2, dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_clean.loc[df_clean[\"revenue\"].idxmax()])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "37b02164-e5a7-4b4f-9977-40ff0e201ef6",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح لان اعلى ايراد كان للعميله Reem اتوقع انها حققت اعلى ايراد لان الايراد يعتمد على السعر والكميه مع بعض مو الكمية لحالها\n",
+    "بس السبب اللي كتبته بالتوقع (اكبر كمية) كان غلط لان اكبر كمية كانت لـ Dana (4)، وReem طلبت 3\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "93f2a1c9-4347-43c4-9ad5-e4098fbaaebd",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### التوصيات\n",
+    "\n",
+    "1. اشوف انه الافضل نركز على Latte لانه اكثر مشروب عليه طلب واعلى واحد بالتقييم\n",
+    "2. اقترح نسوي عروض اكثر في Riyadh لان اغلب الطلبات منها وتمثل تقريبا 45%\n",
+    "3. افضل نحسن Espresso لان تقييمه 3.5 وهو اقل من باقي المشروبات\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e4591eac-336a-4cfc-8b60-3aaeb5e990fc",
+   "metadata": {},
+   "source": [
+    "## Task 5"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "7ecd52c7-8d0d-44dc-b57c-c30d9f45aca3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "trips = {\n",
+    "    \"traveler\": [\"Zara\", \"Omar\", \"Lina\", \"Fahad\", \"Zara\", \"Nora\", \"Yousef\", \"Salma\", \"Khalid\", \"Maya\"],\n",
+    "    \"departure_year\": [2026, 2026, 2026, 2026, 2026, 2026, 2026, 2026, 2026, 2026],\n",
+    "    \"destination_year\": [\"1450\", \"3026\", \"-300\", \"1999\", \"1450\", \"2500\", \"1000000\", \"1917\", \"1450\", None],\n",
+    "    \"age\": [29, 35, 41, 27, 29, 33, 38, -5, 45, 31],\n",
+    "    \"price\": [12000, 30000, 45000, 8000, 12000, 22000, 999999, 15000, 12000, 9000],\n",
+    "    \"status\": [\"done\", \"done\", \"cancelled\", \"done\", \"done\", \"DONE\", \"done\", \"done\", \"Done\", \"done\"],\n",
+    "}\n",
+    "df = pd.DataFrame(trips)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9155cb18-6623-4d43-a6a1-7e87854b80aa",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "- اتوقع فيه قيمه ناقصه وحده في `destination_year`.\n",
+    "- واتوقع ان عمود `status` فيه كلمات مختلفه لكن نفس الحاله مثل `done` و `DONE` و `Done`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "e7e5519e-9631-4913-994a-ce5feb23308b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "traveler            0\n",
+      "departure_year      0\n",
+      "destination_year    1\n",
+      "age                 0\n",
+      "price               0\n",
+      "status              0\n",
+      "dtype: int64\n",
+      "1\n",
+      "traveler            9\n",
+      "departure_year      1\n",
+      "destination_year    7\n",
+      "age                 9\n",
+      "price               8\n",
+      "status              4\n",
+      "dtype: int64\n",
+      "status\n",
+      "done         7\n",
+      "cancelled    1\n",
+      "DONE         1\n",
+      "Done         1\n",
+      "Name: count, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.isna().sum())\n",
+    "\n",
+    "print(df.duplicated().sum())\n",
+    "\n",
+    "print(df.nunique())\n",
+    "\n",
+    "print(df[\"status\"].value_counts())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "da7cb4d9-2939-4874-bd81-64591a4b5e9a",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح بخصوص القيمه الناقصه والاختلاف في كتابه الحالات داخل `status`\n",
+    "لكن ما انتبهت ان فيه صف مكرر ولاحظت وجود قيم غير منطقيه داخل`destination_year` و `age` و `price`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "67f9528c-0ca5-4699-bfb5-ac3ea76ad5bc",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع بعد حذف الصف المكرر يصير عدد الصفوف 9\n",
+    "وبالنسبة للرحله الي ما لها وجهة (`None`) اتوقع اخليها قيمه ناقصه  والعمر `-5` قيمه غير منطقيه واخليه قيمه ناقصه ، لانه ما فيه عمر بالسالب\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "09a24792-c660-4fd2-b374-6a7cd54366fa",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(10, 6)\n",
+      "(9, 6)\n",
+      "status\n",
+      "done         8\n",
+      "cancelled    1\n",
+      "Name: count, dtype: int64\n",
+      "traveler             object\n",
+      "departure_year        int64\n",
+      "destination_year    float64\n",
+      "age                   int64\n",
+      "price                 int64\n",
+      "status               object\n",
+      "dtype: object\n",
+      "1\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "df_trips = df.copy()\n",
+    "\n",
+    "print(df_trips.shape)\n",
+    "\n",
+    "df_trips = df_trips.drop_duplicates()\n",
+    "\n",
+    "print(df_trips.shape)\n",
+    "\n",
+    "df_trips[\"status\"] = df_trips[\"status\"].str.lower()\n",
+    "\n",
+    "print(df_trips[\"status\"].value_counts())\n",
+    "\n",
+    "df_trips[\"destination_year\"] = pd.to_numeric(df_trips[\"destination_year\"])\n",
+    "\n",
+    "print(df_trips.dtypes)\n",
+    "\n",
+    "condition = df_trips[\"age\"] < 0\n",
+    "\n",
+    "df_trips.loc[condition, \"age\"] = np.nan\n",
+    "\n",
+    "print(df_trips[\"age\"].isna().sum())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fb1d1098-fe9e-41ce-bf1f-5da392c3aa2e",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح  لان عدد الصفوف صار 9 بعد حذف الصف المكرر\n",
+    "وتعاملت مع الرحله الي ليس لها وجهة كقيمه ناقصه (`NaN`)، وحولت العمر `-5` الى قيمه ناقصه لانه غير منطقي\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "701ef142-025b-44c7-8c8f-7cbc17a96102",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### قراري (نقطة 3)\n",
+    "\n",
+    "اعتبر سنة الرحله `1000000` والسعر `999999` قيم غلط في البيانات لانها بعيده عن باقي السنوات والاسعار\n",
+    "وقررت احولها الى `NaN` بدل ما احذف الصف عشان باقي بيانات المسافر ممكن تكون مفيده\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "5db98ccf-0dce-4a5d-b0d3-11d8359129f7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "traveler            0\n",
+      "departure_year      0\n",
+      "destination_year    2\n",
+      "age                 1\n",
+      "price               1\n",
+      "status              0\n",
+      "dtype: int64\n",
+      "(9, 6)\n"
+     ]
+    }
+   ],
+   "source": [
+    "condition1 = df_trips[\"destination_year\"] == 1000000\n",
+    "df_trips.loc[condition1, \"destination_year\"] = np.nan\n",
+    "\n",
+    "condition2 = df_trips[\"price\"] == 999999\n",
+    "df_trips.loc[condition2, \"price\"] = np.nan\n",
+    "\n",
+    "print(df_trips.isna().sum())\n",
+    "\n",
+    "print(df_trips.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "39a716bf-6bb5-4cfd-be1c-a7d37ddc1c9c",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان الناتج مطابق لقراري لان الصف ما انحذف وتحولت القيم الغلط الى `NaN`\n",
+    "وصار في `destination_year` قيمتين ناقصه وحده كانت موجوده من قبل والثانيه بسبب تحويل قيمه `1000000` الى `NaN`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8c053d9f-c2cc-4fc7-9fdc-e6c55e2886da",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### قراري (نقطة 4)\n",
+    "\n",
+    "غيرت قراري شوي وما راح احذف `departure_year` الحين\n",
+    "لاننا بنحتاجه في النقطه الجايه عشان نحسب عدد السنوات اللي سافرها كل مسافر عن طريق الفرق بين `destination_year` و `departure_year`\n",
+    "وبعد ما اسوي الاعمدة الجديده وانتهي من التحليل ممكن احذفه اذا لا احتاجه\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1b901453-d5bf-4ac3-835e-441c3c1daebc",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع يكون عندنا رحلات `past` اكثر من `future`\n",
+    "واتوقع القيم الناقصه ما تنحسب لا `past` ولا `future` وتبقى `NaN`\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "c4564a61-e020-4827-8ceb-f92aeb39aa89",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "direction\n",
+      "past      5\n",
+      "future    2\n",
+      "None      2\n",
+      "Name: count, dtype: int64\n",
+      "  traveler  departure_year  destination_year   age    price     status  \\\n",
+      "0     Zara            2026            1450.0  29.0  12000.0       done   \n",
+      "1     Omar            2026            3026.0  35.0  30000.0       done   \n",
+      "2     Lina            2026            -300.0  41.0  45000.0  cancelled   \n",
+      "3    Fahad            2026            1999.0  27.0   8000.0       done   \n",
+      "5     Nora            2026            2500.0  33.0  22000.0       done   \n",
+      "6   Yousef            2026               NaN  38.0      NaN       done   \n",
+      "7    Salma            2026            1917.0   NaN  15000.0       done   \n",
+      "8   Khalid            2026            1450.0  45.0  12000.0       done   \n",
+      "9     Maya            2026               NaN  31.0   9000.0       done   \n",
+      "\n",
+      "   years_traveled direction  \n",
+      "0           576.0      past  \n",
+      "1          1000.0    future  \n",
+      "2          2326.0      past  \n",
+      "3            27.0      past  \n",
+      "5           474.0    future  \n",
+      "6             NaN      None  \n",
+      "7           109.0      past  \n",
+      "8           576.0      past  \n",
+      "9             NaN      None  \n"
+     ]
+    }
+   ],
+   "source": [
+    "df_trips[\"years_traveled\"] = (df_trips[\"destination_year\"] - df_trips[\"departure_year\"]).abs()\n",
+    "\n",
+    "df_trips[\"direction\"] = None\n",
+    "df_trips.loc[df_trips[\"destination_year\"] > df_trips[\"departure_year\"], \"direction\"] = \"future\"\n",
+    "df_trips.loc[df_trips[\"destination_year\"] < df_trips[\"departure_year\"], \"direction\"] = \"past\"\n",
+    "\n",
+    "print(df_trips[\"direction\"].value_counts(dropna=False))\n",
+    "print(df_trips)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "831854f0-7714-4795-9b19-190f64a17c5e",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح لان صار عندنا 5 رحلات `past` و2 `future` و2 ناقصة\n",
+    "واستخدمت `None` بدل `np.nan` لان العمود ما قبل النصوص\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "688dab1e-8472-454c-a88a-832e1347904b",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### توقعي (قبل التشغيل)\n",
+    "\n",
+    "اتوقع اطول رحلة تكون لـ `Lina` لانها سافرت لسنة `-300` والفرق كبير للغاية\n",
+    "واتوقع عدد الرحلات المكتملة (`done`) يكون 8\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "7ca48e77-8b1a-4c01-bc3f-918a88f4cf71",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "destination_year\n",
+      " 1450.0    2\n",
+      " 3026.0    1\n",
+      "-300.0     1\n",
+      " 1999.0    1\n",
+      " 2500.0    1\n",
+      " 1917.0    1\n",
+      "Name: count, dtype: int64\n",
+      "direction\n",
+      "future    26000.0\n",
+      "past      18400.0\n",
+      "Name: price, dtype: float64\n",
+      "8\n",
+      "108000.0\n",
+      "traveler                 Lina\n",
+      "departure_year           2026\n",
+      "destination_year       -300.0\n",
+      "age                      41.0\n",
+      "price                 45000.0\n",
+      "status              cancelled\n",
+      "years_traveled         2326.0\n",
+      "direction                past\n",
+      "Name: 2, dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df_trips[\"destination_year\"].value_counts())\n",
+    "\n",
+    "print(df_trips.groupby(\"direction\")[\"price\"].mean())\n",
+    "\n",
+    "done_trips = df_trips[df_trips[\"status\"] == \"done\"]\n",
+    "print(done_trips.shape[0])\n",
+    "print(done_trips[\"price\"].sum())\n",
+    "\n",
+    "print(df_trips.loc[df_trips[\"years_traveled\"].idxmax()])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b9f4e7b4-3fae-4057-81ab-01c848cfbd10",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### ملاحظتي بعد التشغيل\n",
+    "\n",
+    "كان توقعي صح لان اطول رحلة كانت لـ `Lina` وعدد الرحلات المكتملة كان 8\n",
+    "ولاحظت ان رحلة `Lina` كانت الاطول لكنها كانت `cancelled`، يعني هي اطول رحلة في البيانات لكنها لم تتم\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "a100565f-aec8-4dad-aa3b-1fc23725f687",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Index(['traveler', 'destination_year', 'age', 'price', 'status',\n",
+      "       'years_traveled', 'direction'],\n",
+      "      dtype='object')\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_trips = df_trips.drop(columns=[\"departure_year\"])\n",
+    "print(df_trips.columns)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "48eb1f1e-f747-4127-bd5f-e5a5073e6155",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### قراري بعد التنفيذ (نقطة 4)\n",
+    "\n",
+    "حذفت `departure_year` بعد ما خلصت التحليل لان كل قيمه كانت 2026 وما كان يضيف اي معلومه جديده\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2686103c-cc93-4b20-9563-e4b6e1f302be",
+   "metadata": {},
+   "source": [
+    "<div dir=\"rtl\">\n",
+    "\n",
+    "### تفكير (Task 5)\n",
+    "\n",
+    "اصعب قرار كان التعامل مع سنة `1000000` والسعر `999999`، لاني ما كنت متاكده  اذا هي قيم صحيحة او غلط\n",
+    "وممكن يختلف قراري عن قرار زميلتي لان كل وحدة تفسر البيانات بطريقتها  والقرارين ممكن يكونون صحيحين اذا كان السبب واضح\n",
+    "\n",
+    "</div>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dad12944-1d67-4d26-b64b-750381e3efb1",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
